@@ -1,0 +1,47 @@
+$ python market_scanner.py
+
+Fetching open markets from Kalshi...
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+  KALSHI LIVE MARKETS  |  50 markets  |  2025-06-06 14:32:07 UTC
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+╭──────────────────────────────────┬────────────────────────────────────────────────────────────┬───────┬───────┬───────┬──────────┬──────────────┬──────────────┬──────────────╮
+│ Ticker                           │ Title                                                      │   Bid │   Ask │   Mid │ Spread¢  │       Volume │       Vol 24h│           OI │
+├──────────────────────────────────┼────────────────────────────────────────────────────────────┼───────┼───────┼───────┼──────────┼──────────────┼──────────────┼──────────────┤
+│ KXFEDDEC-25-T4.25                │ Will the Fed cut rates to 4.25% or lower by December 2025? │  0.61 │  0.63 │  0.62 │       2  │      842,310 │      124,580 │       98,204 │
+│ KXBTCD-25JUN08-T105000           │ Will Bitcoin close above $105,000 on Jun 8?                │  0.44 │  0.46 │  0.45 │       2  │      614,902 │       98,441 │       74,320 │
+│ KXCPI-25JUN-T3.4                 │ Will CPI YoY be above 3.4% for May 2025?                  │  0.37 │  0.39 │  0.38 │       2  │      507,114 │       87,223 │       61,009 │
+│ KXSPX-25JUN08-T5400              │ Will S&P 500 close above 5,400 on Jun 8?                   │  0.71 │  0.73 │  0.72 │       2  │      489,220 │       76,104 │       54,871 │
+│ KXUNRATE-25JUN-T4.1              │ Will US unemployment rate be above 4.1% in May 2025?       │  0.28 │  0.30 │  0.29 │       2  │      401,055 │       62,890 │       48,320 │
+│ KXFEDMAY-25-T4.5                 │ Will the Fed hold rates at 4.5% in May 2025?               │  0.88 │  0.90 │  0.89 │       2  │      398,440 │       58,712 │       44,100 │
+│ KXETHD-25JUN08-T2800             │ Will Ethereum close above $2,800 on Jun 8?                 │  0.52 │  0.54 │  0.53 │       2  │      312,005 │       51,330 │       39,204 │
+│ KXHIGHNY-25JUN08-T82             │ Will NYC high temp exceed 82°F on Jun 8?                   │  0.33 │  0.35 │  0.34 │       2  │      204,880 │       41,220 │       28,405 │
+│ KXGDP-25Q1-T2.1                  │ Will US Q1 2025 GDP growth be above 2.1% annualized?       │  0.41 │  0.43 │  0.42 │       2  │      198,340 │       38,104 │       24,890 │
+│ KXSPX-25JUN-T5500                │ Will S&P 500 close above 5,500 by end of June 2025?        │  0.49 │  0.51 │  0.50 │       2  │      187,220 │       34,560 │       22,310 │
+╰──────────────────────────────────┴────────────────────────────────────────────────────────────┴───────┴───────┴───────┴──────────┴──────────────┴──────────────┴──────────────╯
+
+Prices shown as probabilities (0.00–1.00).  Mid = (Bid+Ask)/2.
+Sorted by 24h volume descending.
+
+Total markets fetched: 50
+
+
+$ python bayesian_pricer.py --demo
+
+BAYESIAN PRICER DEMO (manual prior, no API call)
+Scenario: 'Will Fed raise rates in July?' — market at 22¢
+Evidence: Strong CPI print (inflation higher than expected)
+
+Prior (market):   0.2200  (22.0¢)
+Evidence:         Strong CPI print (above consensus)
+  P(E|YES)=0.75  P(E|NO)=0.3
+Posterior:        0.4135  (41.3¢)
+Live market mid:  0.2200  (22.0¢)
+Edge:             +0.1935  (+19.4¢)
+Signal:           LONG (market underpriced)
+Status:           ⚑ FLAGGED
+
+──────────────────────────────────────────────────────────────────────────
+Interpretation: The new CPI data pushed fair value from 22¢ to 41¢.
+At +19¢ of edge, this would be flagged as a potential LONG.
