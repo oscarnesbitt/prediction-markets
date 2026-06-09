@@ -95,7 +95,9 @@ python run_all.py --sheets
 
 ## Sample Output
 
-See [`samples/sample_output.txt`](samples/sample_output.txt) for example terminal output from both the scanner and Bayesian pricer.
+![Bayesian Pricer Example](samples/bayesian_example.png)
+
+See [`samples/sample_output.txt`](samples/sample_output.txt) for additional example terminal output from both the scanner and Bayesian pricer.
 
 ---
 
