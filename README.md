@@ -41,7 +41,7 @@ kalshi_trader/
 
 ### 1. Clone and install dependencies
 ```bash
-git clone https://github.com/yourusername/kalshi-trader.git
+git clone https://github.com/oscarnesbitt/prediction-markets.git
 cd kalshi-trader
 pip install -r requirements.txt
 ```
