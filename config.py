@@ -51,3 +51,18 @@ FOCUS_CATEGORIES = {
 # ─── Bayesian Pricer ─────────────────────────────────────────────────────────
 
 EDGE_THRESHOLD = float(os.getenv("EDGE_THRESHOLD", "0.05"))
+
+# ─── Beta-Bayesian Pricer (distributional) ───────────────────────────────────
+
+# Prior strength: pseudo-observations of trust granted to the market mid when
+# seeding the Beta prior. Higher = tighter prior = harder for evidence to move.
+PRIOR_STRENGTH = float(os.getenv("PRIOR_STRENGTH", "20"))
+
+# Default pseudo-sample-size per evidence piece when a weight isn't specified.
+DEFAULT_EVIDENCE_WEIGHT = float(os.getenv("DEFAULT_EVIDENCE_WEIGHT", "5"))
+
+# Monte Carlo draws for P(underpriced) and edge-interval estimates.
+MC_DRAWS = int(os.getenv("MC_DRAWS", "50000"))
+
+# Credible-interval mass (0.90 => central 5th–95th percentile band).
+CI_LEVEL = float(os.getenv("CI_LEVEL", "0.90"))

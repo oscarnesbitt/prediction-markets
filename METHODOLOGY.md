@@ -107,3 +107,56 @@ P(hike | hot CPI) = (0.75 × 0.22) / [(0.75 × 0.22) + (0.30 × 0.78)]
 - **Automated evidence ingestion** — pipe in BLS CPI releases, Fed speech NLP sentiment, or Polymarket prices as structured evidence inputs
 - **Cross-platform arbitrage** — compare Kalshi and Polymarket prices on equivalent markets to surface arb opportunities
 - **Backtesting** — store historical snapshots and evaluate whether flagged edges were predictive of subsequent price moves
+
+---
+
+## Distributional Extension: Beta Model with Credible Intervals & Monte Carlo
+
+`beta_bayesian_pricer.py` generalizes the point-estimate engine above by
+representing belief about the true YES-probability `θ` as a **Beta
+distribution** rather than a single number. This adds three things the scalar
+engine cannot express: a credible interval around fair value, a Monte-Carlo
+estimate of `P(market underpriced)`, and a conviction flag.
+
+### The model
+
+**Prior.** Treat `θ = P(event resolves YES)` as unknown and seed a Beta prior
+from the market mid, so the prior *mean* equals the market price and the prior
+*strength* `κ` (a pseudo-sample-size expressing how much we trust the crowd)
+controls how hard it is to move:
+
+```
+θ ~ Beta(a₀, b₀),   a₀ = mid · κ,   b₀ = (1 − mid) · κ
+```
+
+**Evidence.** Each piece is expressed in the same `P(E|YES)`, `P(E|NO)` terms as
+the scalar engine, plus a weight `w` (pseudo-observations). It is converted to a
+direction and conjugate pseudo-counts:
+
+```
+q  = P(E|YES) / (P(E|YES) + P(E|NO))       # normalized support for YES
+Δa = w · q,   Δb = w · (1 − q)
+```
+
+**Posterior** (conjugate Beta-Bernoulli update):
+
+```
+θ ~ Beta(a₀ + Σ Δa,  b₀ + Σ Δb)
+```
+
+### What it reports
+
+- **Fair value** = posterior mean `a / (a + b)`
+- **90% credible interval** = `[Beta.ppf(0.05, a, b), Beta.ppf(0.95, a, b)]` — computed exactly from the Beta quantile function
+- **P(market underpriced)** = `P(θ > mid)`, estimated by **Monte Carlo integration**: draw `θ₁…θ_N ~ Beta(a, b)` and take the fraction exceeding the mid
+- **Conviction** — an edge is only marked *high-confidence* when the 90% credible interval of the edge (`θ − mid`) excludes zero
+
+### Relationship to the scalar engine
+
+The scalar `bayesian_pricer` applies Bayes' Rule to a single point and returns a
+point posterior. This module returns a full distribution, so the posterior
+*means* will not be numerically identical — they come from related but distinct
+models. That is by design: the point of the Beta version is **uncertainty
+quantification**, not reproducing the point estimate. A wide credible interval
+that straddles the market price is itself the signal — it says "the point edge
+is positive, but we don't yet have enough evidence to bet on it."

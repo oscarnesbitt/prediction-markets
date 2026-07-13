@@ -11,8 +11,9 @@ Built as a portfolio project for quantitative trading roles requiring hands-on p
 1. **Market Scanner** — pulls live market data from Kalshi's public REST API and prints a clean table of titles, bid/ask prices, mid-prices, and volume
 2. **Google Sheets Sync** — auto-pushes market data to a Google Sheet on a configurable interval
 3. **Bayesian Pricer** — takes a live market price as a prior, applies Bayes' Rule given new evidence, and flags markets where the posterior diverges meaningfully from the market price
+4. **Beta-Bayesian Pricer** — a distributional version that models the fair value as a Beta posterior, reporting a **90% credible interval**, a Monte-Carlo estimate of **P(market underpriced)**, and a conviction flag (whether the edge's interval excludes zero)
 
-See [`METHODOLOGY.md`](METHODOLOGY.md) for a full explanation of the Bayesian approach and worked example.
+See [`METHODOLOGY.md`](METHODOLOGY.md) for a full explanation of both the point-estimate and distributional Bayesian approaches, with worked examples.
 
 ---
 
@@ -29,7 +30,8 @@ kalshi_trader/
 ├── kalshi_client.py      # Kalshi REST API wrapper
 ├── market_scanner.py     # Live market data + display table
 ├── sheets_sync.py        # Google Sheets auto-update
-├── bayesian_pricer.py    # Bayesian fair-value engine
+├── bayesian_pricer.py    # Bayesian fair-value engine (point estimate)
+├── beta_bayesian_pricer.py # Distributional engine (Beta posterior + credible intervals + Monte Carlo)
 ├── run_all.py            # Entry point
 └── samples/
     └── sample_output.txt # Example terminal output
@@ -77,6 +79,12 @@ python bayesian_pricer.py --demo
 
 # Run Bayesian pricer interactively (pick any live ticker)
 python bayesian_pricer.py
+
+# Run the distributional (Beta) demo — fair value + 90% credible interval + P(underpriced)
+python beta_bayesian_pricer.py --demo
+
+# Run the Beta pricer interactively
+python beta_bayesian_pricer.py
 
 # Sync to Google Sheets (runs once then exits)
 python sheets_sync.py --once
