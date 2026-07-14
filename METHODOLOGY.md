@@ -26,7 +26,7 @@ This is used as the market's consensus probability estimate throughout the Bayes
 
 ### The Core Problem
 
-Prediction market prices reflect the crowd's aggregate probability estimate. When new information enters the market — a data release, a news event, a poll — prices should update to reflect the new evidence. In practice, markets often lag, especially in thinner markets or immediately after a surprise.
+Prediction market prices reflect the crowd's aggregate probability estimate. When new information enters the market, such a a data release or news event, prices should update to reflect the new evidence. In practice, markets often lag, especially in thinner markets or immediately after a surprise.
 
 The goal of the Bayesian engine is to compute a **fair-value posterior** given new evidence and compare it to the live market price. A meaningful gap between the two is a potential trading signal.
 
